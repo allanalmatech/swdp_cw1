@@ -1,0 +1,11 @@
+# assignment materials (private)
+prompt.txt
+BrewHub-Case-Study*.pdf
+BrewHub-Case-Study*.docx
+
+# compiled output
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
