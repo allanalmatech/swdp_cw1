@@ -71,9 +71,3 @@ java -cp out stretch.Main
 Note: milestones 2, 3 and 4 are self-contained. Milestones 5 and the stretch re-use
 Milestone 2's `Observer`/`OrderStatusPublisher`, which is why the compile command above
 always includes `milestone2_observer\*.java`.
-
-## Assumptions
-
-The handout PDF itself was not attached, so we implemented from the task list in
-`prompt.txt`. One assumption: class/file names use plain ASCII (`Bogota`), and the
-third region for Milestone 4 is London.
