@@ -1,10 +1,15 @@
 # Milestone 1 - Strategy
 
-BrewHub sells the same coffee at different prices depending on who is buying: students get 10% off, happy hour is 20% off over a minimum spend, loyalty points come off the total, and everyone else pays full price. We used the Strategy pattern because the pricing rule is the part of the order that keeps changing, and we did not want those rules living inside `Order`.
+BrewHub wants several checkout pricing schemes - student discount, happy-hour pricing, loyalty-tier pricing, and plain "no discount" - and new schemes keep arriving. The price is the part of the order that changes most, so we kept the rules out of `Order` and made each scheme a strategy.
 
-We did not use an `if/else` chain in `getTotal()` on purpose. The moment a fourth rule appears we would have to open `Order` and edit it, and every new rule would be another branch in the same method, so a mistake in the student rule could also affect the loyalty rule. Worse, the rule was baked in when the method was written, so an order could not change its mind halfway through a session. With a strategy the order just holds a `PricingStrategy` and asks it, so swapping the rule at runtime is a single `setPricing` call, and we can add a brand new rule later as a new class without touching `Order` at all.
+What's in the package:
+- `PricingStrategy` - the interface with one method, `calculateTotal(subtotal)`
+- `StudentDiscount`, `HappyHourPricing`, `LoyaltyPoints` - three concrete strategies
+- `NoDiscount` - the default strategy for orders with no discount
+- `Order` - holds a `PricingStrategy` field and delegates `getTotal()` to it; `setPricing()` swaps the strategy at runtime (e.g. a loyalty-tier upgrade mid-session)
+- `Main` - demo: prices the same order with every strategy, then swaps strategies while the order is still open
 
-Design decisions: each strategy is its own small class so it can be reused and tested on a plain number; strategies only see the subtotal, never the order or its items; and `setPricing` is public because a cashier really does change the price mid-session.
+Why not just use if/else? A chain of if/else inside `getTotal()` works today, but every new scheme means editing `Order`, and one wrong branch could break every other scheme. The order could not change its pricing mid-session either. As a strategy, the order never knows the rules, it just asks the strategy it holds, and a new scheme is a new class rather than a new branch.
 
 ## Compile and run
 
@@ -13,4 +18,4 @@ javac -d out milestone1_strategy\*.java
 java -cp out milestone1_strategy.Main
 ```
 
-(On macOS/Linux use `milestone1_strategy/*.java`.) Java 17 is required.
+On macOS/Linux use `milestone1_strategy/*.java`. Java 17 is required.
